@@ -11,10 +11,10 @@ public record CarsDTO(
 
         @NotBlank @NotEmpty String fabricante,
 
-        @NotBlank @NotEmpty @Past Date dataFabricacao,
+        @Past Date dataFabricacao,
 
-        @NotBlank @NotEmpty double valor,
+        double valor,
 
-        @NotBlank @NotEmpty int anoModelo) {
+        int anoModelo) {
 
 }
