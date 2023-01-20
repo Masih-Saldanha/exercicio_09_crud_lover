@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.crudlover.api.dto.CarsDTO;
 import com.crudlover.api.model.Cars;
-import com.crudlover.api.repository.CarsRepository;
+import com.crudlover.api.service.CarsService;
 
 import jakarta.validation.Valid;
 
@@ -22,42 +22,30 @@ import jakarta.validation.Valid;
 @RequestMapping("/")
 public class CarsController {
     @Autowired
-    private CarsRepository repository;
+    private CarsService service;
 
     @GetMapping
     public List<Cars> listAll() {
-        return repository.findAll();
+        return service.listAll();
     }
 
     @PostMapping
     public void create(@RequestBody @Valid CarsDTO req) {
-        repository.save(new Cars(req));
+        service.create(req);
     }
 
     @PutMapping("/{id}")
     public void update(@PathVariable Long id, @RequestBody @Valid CarsDTO req) {
-        repository.findById(id).map(car -> {
-            car.setModelo(req.modelo());
-            car.setFabricante(req.fabricante());
-            car.setDataFabricacao(req.dataFabricacao());
-            car.setValor(req.valor());
-            car.setAnoModelo(req.anoModelo());
-            return repository.save(car);
-        });
+        service.update(id, req);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        repository.deleteById(id);
+        service.delete(id);
     }
 
     @PostMapping("/show")
     public CarsDTO showData(@RequestBody @Valid CarsDTO req) {
-        System.out.println(req.modelo());
-        System.out.println(req.fabricante());
-        System.out.println(req.dataFabricacao());
-        System.out.println(req.valor());
-        System.out.println(req.anoModelo());
-        return req;
+        return service.showData(req);
     }
 }
