@@ -34,13 +34,25 @@ public class CarsController {
         repository.save(new Cars(req));
     }
 
+    @PutMapping("/{id}")
+    public void update(@PathVariable Long id, @RequestBody @Valid CarsDTO req) {
+        repository.findById(id).map(car -> {
+            car.setModelo(req.modelo());
+            car.setFabricante(req.fabricante());
+            car.setDataFabricacao(req.dataFabricacao());
+            car.setValor(req.valor());
+            car.setAnoModelo(req.anoModelo());
+            return repository.save(car);
+        });
+    }
+
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         repository.deleteById(id);
     }
 
     @PostMapping("/show")
-    public CarsDTO showData(@RequestBody CarsDTO req) {
+    public CarsDTO showData(@RequestBody @Valid CarsDTO req) {
         System.out.println(req.modelo());
         System.out.println(req.fabricante());
         System.out.println(req.dataFabricacao());
